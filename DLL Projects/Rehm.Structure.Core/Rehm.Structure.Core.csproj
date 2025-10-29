@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="BaseLibraryNET8">
+      <HintPath>R:\Dependencies\net\net8.0-windows\CustomLibrary\BaseLibrary\BaseLibraryNET8.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
