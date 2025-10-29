@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GeometryGymIFCcore\GeometryGymIFCcore.csproj" />
+    <ProjectReference Include="..\Rehm.Structure.Core\Rehm.Structure.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="BaseLibraryNET8">
+      <HintPath>R:\Dependencies\net\net8.0-windows\CustomLibrary\BaseLibrary\BaseLibraryNET8.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
