@@ -37,9 +37,52 @@ If the constructor is called only be the desired ModelView item, the boilerplate
     string path = "<filepath/to/model>";
     var database = new DatabaseIfc(path);
 
-## Save model in STEP-P21 
+## Save model in STEP-P21
 
     database.WriteFile("myIfcFile.ifc");
+
+## Example: Create a single pipe element
+
+The snippet below shows the minimum steps required to build a project hierarchy, add one `IfcPipeSegment`, and persist the model as a STEP file.  The model view `Ifc4X3_RC2` is used so that infrastructure-focused distribution elements such as pipe segments are available.
+
+```csharp
+using GeometryGym.Ifc;
+
+var database = new DatabaseIfc(ModelView.Ifc4X3_RC2);
+
+// Projects need units; metres are a convenient default for length-based geometry.
+var project = new IfcProject(database, "Pipe sample");
+project.UnitsInContext = new IfcUnitAssignment(database, IfcUnitAssignment.Length.Metre);
+
+// Build a simple spatial hierarchy: Site → Building → Storey.
+var site = new IfcSite(database, "Demo site");
+project.AddAggregated(site);
+
+var building = new IfcBuilding(database, "Demo building");
+site.AddAggregated(building);
+
+var storey = new IfcBuildingStorey(building, "Ground floor", 0.0);
+
+// Position the pipe relative to the storey origin.
+var pipePlacement = new IfcLocalPlacement(storey.ObjectPlacement, database.Factory.XYPlanePlacement);
+
+// A hollow circular profile swept along the +Z axis creates a straight pipe run.
+var pipeProfile = new IfcCircleHollowProfileDef(database, "DN150", radius: 0.075, wallThickness: 0.005);
+var pipeSolid = new IfcExtrudedAreaSolid(pipeProfile, depth: 3.0);
+var pipeShape = new IfcProductDefinitionShape(new IfcShapeRepresentation(pipeSolid));
+
+var pipe = new IfcPipeSegment(storey, pipePlacement, pipeShape, system: null)
+{
+    Name = "Sample pipe run",
+    PredefinedType = IfcPipeSegmentTypeEnum.RIGIDSEGMENT
+};
+
+database.WriteFile("SinglePipe.ifc");
+```
+
+### Ready-to-run sample project
+
+An executable example that wraps the snippet above is provided under [`Examples/SinglePipeExample`](Examples/SinglePipeExample).  The `SinglePipeModelBuilder` class exposes reusable helpers for creating the model and writing it to disk, and `Program.cs` demonstrates how to call it from a console application entry point.
 
 <!-- ## Save model in IFCXML
 
