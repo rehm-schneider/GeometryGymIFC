@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeometryGymIFC", "GeometryGymIFC\GeometryGymIFC.csproj", "{6CD3BE38-25BC-4FCF-9426-D15ED4D4657C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeometryGymIFCRhinoCommonx64", "GeometryGymIFCRhinoCommonx64\GeometryGymIFCRhinoCommonx64.csproj", "{0E350E61-D5D6-4C9D-BDC8-494F3FF6E5C1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeometryGymIFCcore", "GeometryGymIFCcore\GeometryGymIFCcore.csproj", "{8A9147EC-5769-4F66-9272-4549BB9B0BF6}"
 EndProject
 Global
