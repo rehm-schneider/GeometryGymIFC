@@ -48,8 +48,8 @@ namespace Rehm.Structure.IfcExport.Readers
 
                 string identifier = string.IsNullOrWhiteSpace(haltung.Bezeichnung) ? string.Empty : haltung.Bezeichnung;
 
-                SewerCoordinate start = SewerCoordinate.From(haltung.RechtswertSohleOben, haltung.HochwertSohleOben, haltung.HoeheOben);
-                SewerCoordinate end = SewerCoordinate.From(haltung.RechtswertSohleUnten, haltung.HochwertSohleUnten, haltung.HoeheUnten);
+                SewerCoordinate start = SewerCoordinate.From(haltung.RechtswertSohleOben, haltung.HochwertSohleOben, haltung.SohlhöheVonSchacht);
+                SewerCoordinate end = SewerCoordinate.From(haltung.RechtswertSohleUnten, haltung.HochwertSohleUnten, haltung.SohlhöheBisSchacht);
 
                 segments.Add(new SewagePipeSegment(identifier, start, end));
             }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Rehm.Structure.Core
 {
-    internal class GraPSObjectReader
+    public class GraPSObjectReader
     {
         private readonly DatabaseConnection _databaseConnection;
         public GraPSObjectReader(DatabaseConnection databaseConnection)
@@ -39,10 +39,10 @@ namespace Rehm.Structure.Core
                 Bezeichnung = row.SafeTo<string>("Haltungsbezeichnung"),
                 RechtswertSohleOben = row.SafeTo<double>("RechtswertSohleOben"),
                 HochwertSohleOben = row.SafeTo<double>("HochwertSohleOben"),
-                HoeheOben = row.SafeTo<float>("SohlhöheVonSchacht"),
+                SohlhöheVonSchacht = row.SafeTo<float>("SohlhöheVonSchacht"),
                 RechtswertSohleUnten = row.SafeTo<double>("RechtswertSohleUnten"),
                 HochwertSohleUnten = row.SafeTo<double>("HochwertSohleUnten"),
-                HoeheUnten = row.SafeTo<float>("SohlhöheBisSchacht")
+                SohlhöheBisSchacht = row.SafeTo<float>("SohlhöheBisSchacht")
             };
         }
     }

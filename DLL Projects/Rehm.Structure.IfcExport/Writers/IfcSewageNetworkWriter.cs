@@ -19,14 +19,14 @@ namespace Rehm.Structure.IfcExport.Writers
             }
 
             List<SewagePipeSegment> segmentList = segments.ToList();
-            var database = new DatabaseIfc(ModelView.Ifc4X3_RC2);
+            var database = new DatabaseIfc(ReleaseVersion.IFC4X3_ADD2);
             var project = new IfcProject(database, string.IsNullOrWhiteSpace(projectName) ? "Sewage network" : projectName);
 
             var site = new IfcSite(database, project.Name + " Site");
             new IfcRelAggregates(project, site);
 
             string resolvedSystemName = string.IsNullOrWhiteSpace(systemName) ? project.Name : systemName;
-            var system = new IfcDistributionSystem(site, resolvedSystemName, IfcDistributionSystemEnum.WASTEWATERSYSTEM);
+            var system = new IfcDistributionSystem(site, resolvedSystemName, IfcDistributionSystemEnum.SEWAGE);
 
             foreach (SewagePipeSegment segment in segmentList)
             {

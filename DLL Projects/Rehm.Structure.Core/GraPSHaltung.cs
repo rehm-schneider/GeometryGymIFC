@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Rehm.Structure.Core
 {
-	internal class GraPSHaltung
+	public class GraPSHaltung
 	{
 		public string Bezeichnung { get; set; }
 		public double RechtswertSohleOben { get; set; }
 		public double HochwertSohleOben { get; set; }
-		public float HoeheOben { get; set; }
+		public float SohlhöheVonSchacht { get; set; }
 		public double RechtswertSohleUnten { get; set; }
 		public double HochwertSohleUnten { get; set; }
-		public float HoeheUnten { get; set; }
+		public float SohlhöheBisSchacht { get; set; }
 	}
 }
