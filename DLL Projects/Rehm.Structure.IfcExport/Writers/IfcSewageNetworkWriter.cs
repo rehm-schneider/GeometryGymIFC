@@ -36,13 +36,43 @@ namespace Rehm.Structure.IfcExport.Writers
             return database;
         }
 
+        private const double DefaultOuterDiameter = 0.1;
+        private const double RadiusTolerance = 1e-6;
+
         private static void CreatePipeSegment(IfcSite site, IfcDistributionSystem system, SewagePipeSegment segment, DatabaseIfc database)
         {
             var startPoint = new IfcCartesianPoint(database, segment.Start.Easting, segment.Start.Northing, segment.Start.Elevation);
             var endPoint = new IfcCartesianPoint(database, segment.End.Easting, segment.End.Northing, segment.End.Elevation);
 
-            var polyline = new IfcPolyline(startPoint, endPoint);
-            var shape = new IfcProductDefinitionShape(new IfcShapeRepresentation(polyline, ShapeRepresentationType.Curve3D));
+            if (startPoint == null || endPoint == null)
+            {
+                return;
+            }
+
+            var directrix = new IfcPolyline(startPoint, endPoint);
+
+            double resolvedOuterDiameter = segment.OuterDiameter.HasValue && segment.OuterDiameter.Value > RadiusTolerance
+                ? segment.OuterDiameter.Value
+                : DefaultOuterDiameter;
+
+            double outerRadius = resolvedOuterDiameter / 2.0;
+
+            double? innerRadius = null;
+            if (segment.InnerDiameter.HasValue && segment.InnerDiameter.Value > RadiusTolerance)
+            {
+                double candidate = segment.InnerDiameter.Value / 2.0;
+                if (candidate < outerRadius - RadiusTolerance)
+                {
+                    innerRadius = candidate;
+                }
+            }
+
+            IfcSweptDiskSolid sweptDisk = innerRadius.HasValue
+                ? new IfcSweptDiskSolid(directrix, outerRadius, innerRadius.Value)
+                : new IfcSweptDiskSolid(directrix, outerRadius);
+
+            var bodyRepresentation = new IfcShapeRepresentation(sweptDisk, ShapeRepresentationType.SweptSolid);
+            var shape = new IfcProductDefinitionShape(bodyRepresentation);
 
             var placement = new IfcLocalPlacement(site.ObjectPlacement, new IfcAxis2Placement3D(startPoint));
 
@@ -51,7 +81,7 @@ namespace Rehm.Structure.IfcExport.Writers
             pipeSegment.PredefinedType = IfcPipeSegmentTypeEnum.NOTDEFINED;
 
             var subContext = database.Factory.SubContext(IfcGeometricRepresentationSubContext.SubContextIdentifier.Axis);
-            var axisRepresentation = new IfcShapeRepresentation(subContext, polyline, ShapeRepresentationType.Curve3D);
+            var axisRepresentation = new IfcShapeRepresentation(subContext, directrix, ShapeRepresentationType.Curve3D);
             shape.Representations.Add(axisRepresentation);
         }
     }

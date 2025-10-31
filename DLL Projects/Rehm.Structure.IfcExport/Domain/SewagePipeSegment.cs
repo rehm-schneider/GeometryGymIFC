@@ -29,11 +29,15 @@ namespace Rehm.Structure.IfcExport.Domain
     /// </summary>
     public sealed class SewagePipeSegment
     {
+        private const double MinimumDiameterTolerance = 1e-6;
+
         public string Identifier { get; private set; }
         public SewerCoordinate Start { get; private set; }
         public SewerCoordinate End { get; private set; }
+        public double? OuterDiameter { get; private set; }
+        public double? InnerDiameter { get; private set; }
 
-        public SewagePipeSegment(string identifier, SewerCoordinate start, SewerCoordinate end)
+        public SewagePipeSegment(string identifier, SewerCoordinate start, SewerCoordinate end, double? outerDiameter = null, double? innerDiameter = null)
         {
             if (start == null)
             {
@@ -45,9 +49,26 @@ namespace Rehm.Structure.IfcExport.Domain
                 throw new ArgumentNullException("end");
             }
 
+            if (outerDiameter.HasValue && outerDiameter.Value <= MinimumDiameterTolerance)
+            {
+                outerDiameter = null;
+            }
+
+            if (innerDiameter.HasValue && innerDiameter.Value <= MinimumDiameterTolerance)
+            {
+                innerDiameter = null;
+            }
+
+            if (outerDiameter.HasValue && innerDiameter.HasValue && innerDiameter.Value >= outerDiameter.Value)
+            {
+                innerDiameter = Math.Max(MinimumDiameterTolerance, outerDiameter.Value - MinimumDiameterTolerance);
+            }
+
             Identifier = identifier ?? string.Empty;
             Start = start;
             End = end;
+            OuterDiameter = outerDiameter;
+            InnerDiameter = innerDiameter;
         }
     }
 }
